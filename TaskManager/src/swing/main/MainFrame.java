@@ -1,81 +1,87 @@
 package swing.main;
 
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 public class MainFrame extends JFrame{
 	public String[] PanelNames = {"top","Sub", "Edit"};
-	MainPanel mp = new MainPanel(this,PanelNames[0]);
-    TaskRegisterPanel trp = new TaskRegisterPanel(this,PanelNames[1]);
-    TaskEditPanel tep = new TaskEditPanel(this,PanelNames[2]);
+	MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
+    TaskRegisterPanel taskRegisterPanel = new TaskRegisterPanel(this,PanelNames[1]);
+    TaskEditPanel taskEditPanel = new TaskEditPanel(this,PanelNames[2]);
     MainFrame mf;
     
     public MainFrame(){
-    	MainPanel mp = new MainPanel(this,PanelNames[0]);
-        this.add(mp);mp.setVisible(true);
-        this.add(trp);trp.setVisible(false);
-        this.add(tep);tep.setVisible(false);
+    	MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
+        this.add(mainPanel);
+        mainPanel.setVisible(true);
+        
+        this.add(taskRegisterPanel);
+        taskRegisterPanel.setVisible(false);
+        
+        this.add(taskEditPanel);
+        taskEditPanel.setVisible(false);
+        
         this.setBounds(100, 100, 1200, 800);
     }
     
     public static void main(String[] args) {
-        MainFrame mf = new MainFrame();
-        mf.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        mf.setVisible(true);
+        MainFrame mainFrame = new MainFrame();
+        mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
     }
     
     public void reloadPage(String panelName, JPanel jp){
     	
-    	MainFrame mf = new MainFrame();
-        mf.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        mf.setVisible(true);
+    	MainFrame mainFrame = new MainFrame();
+    	mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    	mainFrame.setVisible(true);
         
-    	if(panelName==PanelNames[0]){
-    		mf.remove((MainPanel)jp);
+    	if(panelName == PanelNames[0]){
+    		mainFrame.remove((MainPanel)jp);
     		MainPanel mp = new MainPanel(this,PanelNames[0]);
-    		mf.add(mp);
+    		mainFrame.add(mp);
     	}
-    	else if(panelName==PanelNames[1]){
-    		mf.remove((TaskRegisterPanel)jp);
+    	else if(panelName == PanelNames[1]){
+    		mainFrame.remove((TaskRegisterPanel)jp);
     		TaskRegisterPanel trp = new TaskRegisterPanel(this,PanelNames[1]);
-    		mf.add(trp);
+    		mainFrame.add(trp);
     	}
-    	else if(panelName==PanelNames[2]){
-    		mf.remove((TaskEditPanel)jp);
+    	else if(panelName == PanelNames[2]){
+    		mainFrame.remove((TaskEditPanel)jp);
     		TaskEditPanel tep = new TaskEditPanel(this,PanelNames[2]);
-    		mf.add(tep);
+    		mainFrame.add(tep);
     	}
     }
     
-    public void PanelChange(JPanel jp, String str, String EditString){
-        String name = jp.getName();
-        if(name==PanelNames[0]){
-            mp = (MainPanel)jp;
-            jp.setVisible(false);
-        }else if(name==PanelNames[1]){
-            trp = (TaskRegisterPanel)jp;
-            trp.setVisible(false);
+    //パネル遷移メソッド
+    public void PanelChange(JPanel nowPanel, String toPanelName, String EditString){
+    	String nowPanelName = nowPanel.getName();
+        
+        //遷移元のパネルを非表示
+        if(nowPanelName == PanelNames[0]){
+        	mainPanel = (MainPanel)nowPanel;
+        	nowPanel.setVisible(false);
         }
-        else if(name==PanelNames[2]){
-            tep = (TaskEditPanel)jp;
-            tep.setVisible(false);
+        else if(nowPanelName == PanelNames[1]){
+        	taskRegisterPanel = (TaskRegisterPanel)nowPanel;
+        	taskRegisterPanel.setVisible(false);
         }
-        if(str==PanelNames[0]){
-            mp.setVisible(true);
-        }else if(str==PanelNames[1]){
-            trp.setVisible(true);
+        else if(nowPanelName == PanelNames[2]){
+        	taskEditPanel = (TaskEditPanel)nowPanel;
+        	taskEditPanel.setVisible(false);
         }
-        else if(str==PanelNames[2]){
-        	tep.setEditString(EditString);
-            tep.setVisible(true);
+        
+        //遷移先のパネルを表示
+        if(toPanelName == PanelNames[0]){
+        	mainPanel.setVisible(true);
+        }
+        else if(toPanelName == PanelNames[1]){
+        	taskRegisterPanel.setVisible(true);
+        }
+        else if(toPanelName == PanelNames[2]){
+        	//編集パネルだけ初期文字列を設定
+        	taskEditPanel.setEditString(EditString);
+        	taskEditPanel.setVisible(true);
         }
     }
 }
