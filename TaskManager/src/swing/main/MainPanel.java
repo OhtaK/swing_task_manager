@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 public class MainPanel extends JPanel{
 	
     MainFrame mainFrame;
-    String str;
     
     public static HashMap<Integer,ArrayList<String>> taskSet = new HashMap<Integer,ArrayList<String>>();
     public static String nowSelectText;
@@ -40,10 +39,9 @@ public class MainPanel extends JPanel{
     JList<String> doneList = new JList<String>();
     
     //panel作成
-    MainPanel(MainFrame m,String title){
-    	mainFrame = m;
-    	str = title;
-    	this.setName("top");
+    MainPanel(MainFrame mf,String  name){
+    	mainFrame = mf;
+    	this.setName(name);
     	this.setLayout(null);
 
     	this.setBounds(100, 100, 1000, 800);

@@ -18,19 +18,15 @@ import java.sql.SQLException;
  
 public class TaskRegisterPanel extends JPanel {
     JButton btn = new JButton("登録");
-    MainFrame mf;
-    String str;
+    MainFrame mainFrame;
     Connection con = null;
 	Statement smt = null;
 	
-    public TaskRegisterPanel(MainFrame m,String s){
-        mf = m;
-        str = s;
-        this.setName(s);
+    public TaskRegisterPanel(MainFrame mf,String name){
+    	mainFrame = mf;
+        this.setName(name);
         this.setLayout(null);
         this.setSize(800, 1000);
-        HashMap<Integer,ArrayList<String>> resultSetForRegister = MainPanel.resultSet;
-        Set<Integer> MapSet = resultSetForRegister.keySet();
 
         JLabel label1 = new JLabel("タスク名");
         JLabel label2 = new JLabel("期限");
@@ -44,23 +40,23 @@ public class TaskRegisterPanel extends JPanel {
         btn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
             	try {
-            		   // JDBCドライバーの指定
-            		   Class.forName("org.sqlite.JDBC");
-            		 
-            		   // データベースに接続する なければ作成される
-            		   con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
-            		   smt = con.createStatement();
-            		   int id = serchLastId(MainPanel.resultSet) + 1;
-            		   String sql = "insert into task (id, name, limit_date, comment) values(" + String.valueOf(id) + ", '"+text1.getText() + "', '" + text2.getText() + "', '" + text3.getText() + "');";
-            		   smt.executeUpdate(sql);
-            		   con.close();
-            		  } catch (ClassNotFoundException e1) {
-            		   // TODO 自動生成された catch ブロック
-            		   e1.printStackTrace();
-            		  } catch (SQLException e2) {
-            		   // TODO 自動生成された catch ブロック
-            		   e2.printStackTrace();
-            		  }
+            		// JDBCドライバーの指定
+            		Class.forName("org.sqlite.JDBC");
+
+            		// データベースに接続する なければ作成される
+            		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
+            		smt = con.createStatement();
+            		int id = serchLastId(MainPanel.taskSet) + 1;
+            		String sql = "insert into task (id, name, limit_date, comment) values(" + String.valueOf(id) + ", '"+text1.getText() + "', '" + text2.getText() + "', '" + text3.getText() + "');";
+            		smt.executeUpdate(sql);
+            		con.close();
+            	} catch (ClassNotFoundException e1) {
+            		// TODO 自動生成された catch ブロック
+            		e1.printStackTrace();
+            	} catch (SQLException e2) {
+            		// TODO 自動生成された catch ブロック
+            		e2.printStackTrace();
+            	}
                 pc();
             }
         });
@@ -82,9 +78,9 @@ public class TaskRegisterPanel extends JPanel {
         this.add(text3);
     }
     public void pc(){
-    	mf.reloadPage(mf.PanelNames[0], this);
+    	mainFrame.reloadPage(mainFrame.PanelNames[0], this);
     	//mf.remove(this);
-        mf.PanelChange((JPanel)this, mf.PanelNames[0], "");
+    	mainFrame.PanelChange((JPanel)this, mainFrame.PanelNames[0], "");
     }
     
     public int serchLastId(HashMap<Integer,ArrayList<String>> resultSet){

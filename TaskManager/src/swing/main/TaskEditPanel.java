@@ -17,8 +17,7 @@ public class TaskEditPanel extends JPanel {
     JButton toDoBtn = new JButton("todoに移動");
     JButton doingBtn = new JButton("doingに移動");
     JButton doneBtn = new JButton("doneに移動");
-    MainFrame mf;
-    String str;
+    MainFrame mainFrame;
     Connection con = null;
 	Statement smt = null;
 	
@@ -29,10 +28,9 @@ public class TaskEditPanel extends JPanel {
     String nowSelectedString = MainPanel.nowSelectText;
     String[] nowSelectedStrings = new String[4];
     
-    public TaskEditPanel(MainFrame m,String s){
-        mf = m;
-        str = s;
-        this.setName(s);
+    public TaskEditPanel(MainFrame mf,String name){
+    	mainFrame = mf;
+        this.setName(name);
         this.setLayout(null);
         this.setSize(800, 1000);
         if(nowSelectedString != null){
@@ -140,8 +138,8 @@ public class TaskEditPanel extends JPanel {
         this.add(text3);
     }
     public void pc(){
-    	mf.reloadPage(mf.PanelNames[0], this);
-        mf.PanelChange((JPanel)this, mf.PanelNames[0], "");
+    	mainFrame.reloadPage(mainFrame.PanelNames[0], this);
+    	mainFrame.PanelChange((JPanel)this, mainFrame.PanelNames[0], "");
     }
     
     public void setEditString(String setString){
