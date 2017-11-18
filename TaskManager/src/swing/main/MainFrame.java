@@ -38,18 +38,18 @@ public class MainFrame extends JFrame{
         
     	if(panelName == PanelNames[0]){
     		mainFrame.remove((MainPanel)jp);
-    		MainPanel mp = new MainPanel(this,PanelNames[0]);
-    		mainFrame.add(mp);
+    		MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
+    		mainFrame.add(mainPanel);
     	}
     	else if(panelName == PanelNames[1]){
     		mainFrame.remove((TaskRegisterPanel)jp);
-    		TaskRegisterPanel trp = new TaskRegisterPanel(this,PanelNames[1]);
-    		mainFrame.add(trp);
+    		TaskRegisterPanel taskRegisterPanel = new TaskRegisterPanel(this,PanelNames[1]);
+    		mainFrame.add(taskRegisterPanel);
     	}
     	else if(panelName == PanelNames[2]){
     		mainFrame.remove((TaskEditPanel)jp);
-    		TaskEditPanel tep = new TaskEditPanel(this,PanelNames[2]);
-    		mainFrame.add(tep);
+    		TaskEditPanel taskEditPanel = new TaskEditPanel(this,PanelNames[2]);
+    		mainFrame.add(taskEditPanel);
     	}
     }
     
