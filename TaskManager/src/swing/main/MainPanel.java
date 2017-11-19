@@ -177,6 +177,6 @@ public class MainPanel extends JPanel{
     }
 
     public void panelChange(String toPanelName){
-    	mainFrame.PanelChange((JPanel)this, toPanelName, nowSelectText);
+    	mainFrame.panelChange((JPanel)this, toPanelName, nowSelectText);
     }
 } 

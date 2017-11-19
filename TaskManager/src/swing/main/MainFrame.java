@@ -54,7 +54,7 @@ public class MainFrame extends JFrame{
     }
     
     //パネル遷移メソッド
-    public void PanelChange(JPanel nowPanel, String toPanelName, String EditString){
+    public void panelChange(JPanel nowPanel, String toPanelName, String EditString){
     	String nowPanelName = nowPanel.getName();
         
         //遷移元のパネルを非表示

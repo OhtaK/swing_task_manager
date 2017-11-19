@@ -14,16 +14,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
  
 public class TaskEditPanel extends JPanel {
-    JButton toDoBtn = new JButton("todoに移動");
-    JButton doingBtn = new JButton("doingに移動");
-    JButton doneBtn = new JButton("doneに移動");
+    
     MainFrame mainFrame;
     Connection con = null;
 	Statement smt = null;
 	
-	JTextField text1 = new JTextField(10);
-    JTextField text2 = new JTextField(10);
-    JTextField text3 = new JTextField(10);
+	JTextField taskTitle = new JTextField(10);
+    JTextField taskLimit = new JTextField(10);
+    JTextField taskDiscription = new JTextField(10);
     
     String nowSelectedString = MainPanel.nowSelectText;
     String[] nowSelectedStrings = new String[4];
@@ -37,11 +35,9 @@ public class TaskEditPanel extends JPanel {
         	nowSelectedStrings = nowSelectedString.split(":", 0);
         }
         
-        JLabel label1 = new JLabel("タスク名");
-        JLabel label2 = new JLabel("期限");
-        JLabel label3 = new JLabel("備考");
-        
+        JButton toDoBtn = new JButton("todoに移動");
         toDoBtn.setBounds(150, 150, 200, 40);
+        
         toDoBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
             	try {
@@ -51,7 +47,7 @@ public class TaskEditPanel extends JPanel {
           		   // データベースに接続する なければ作成される
           		   con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
           		   smt = con.createStatement();
-          		   String sql = "update task set name='"+ text1.getText() + "', limit_date='" + text2.getText() + "', comment='"+ text3.getText() + "', status=0 where id=" + nowSelectedStrings[0]+ ";";
+          		   String sql = "update task set name='"+ taskTitle.getText() + "', limit_date='" + taskLimit.getText() + "', comment='"+ taskDiscription.getText() + "', status=0 where id=" + nowSelectedStrings[0]+ ";";
           		  
           		   smt.executeUpdate(sql);
           		   con.close();
@@ -63,11 +59,13 @@ public class TaskEditPanel extends JPanel {
           		   e2.printStackTrace();
           		  }
             	
-                pc();
+            	panelChange();
             }
         });
         
+        JButton doingBtn = new JButton("doingに移動");
         doingBtn.setBounds(350, 150, 200, 40);
+        
         doingBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
             	try {
@@ -77,7 +75,7 @@ public class TaskEditPanel extends JPanel {
           		   // データベースに接続する なければ作成される
           		   con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
           		   smt = con.createStatement();
-          		   String sql = "update task set name='"+ text1.getText() + "', limit_date='" + text2.getText() + "', comment='"+ text3.getText() + "', status=1 where id=" + nowSelectedStrings[0]+ ";";
+          		   String sql = "update task set name='"+ taskTitle.getText() + "', limit_date='" + taskLimit.getText() + "', comment='"+ taskDiscription.getText() + "', status=1 where id=" + nowSelectedStrings[0]+ ";";
           		  
           		   smt.executeUpdate(sql);
           		   con.close();
@@ -89,57 +87,63 @@ public class TaskEditPanel extends JPanel {
           		   e2.printStackTrace();
           		  }
             	
-                pc();
+            	panelChange();
             }
         });
         
+        JButton doneBtn = new JButton("doneに移動");
         doneBtn.setBounds(550, 150, 200, 40);
+        
         doneBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
             	try {
-          		   // JDBCドライバーの指定
-          		   Class.forName("org.sqlite.JDBC");
-          		 
-          		   // データベースに接続する なければ作成される
-          		   con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
-          		   smt = con.createStatement();
-          		   String sql = "update task set name='"+ text1.getText() + "', limit_date='" + text2.getText() + "', comment='"+ text3.getText() + "', status=2 where id=" + nowSelectedStrings[0]+ ";";
-          		  
-          		   smt.executeUpdate(sql);
-          		   con.close();
-          		  } catch (ClassNotFoundException e1) {
-          		   // TODO 自動生成された catch ブロック
-          		   e1.printStackTrace();
-          		  } catch (SQLException e2) {
-          		   // TODO 自動生成された catch ブロック
-          		   e2.printStackTrace();
-          		  }
+            		// JDBCドライバーの指定
+            		Class.forName("org.sqlite.JDBC");
+
+            		// データベースに接続する なければ作成される
+            		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
+            		smt = con.createStatement();
+            		String sql = "update task set name='"+ taskTitle.getText() + "', limit_date='" + taskLimit.getText() + "', comment='"+ taskDiscription.getText() + "', status=2 where id=" + nowSelectedStrings[0]+ ";";
+
+            		smt.executeUpdate(sql);
+            		con.close();
+            	} catch (ClassNotFoundException e1) {
+            		// TODO 自動生成された catch ブロック
+            		e1.printStackTrace();
+            	} catch (SQLException e2) {
+            		// TODO 自動生成された catch ブロック
+            		e2.printStackTrace();
+            	}
             	
-                pc();
+            	panelChange();
             }
         });
         
-        label1.setBounds(150, 50, 200, 40);
-        label2.setBounds(350, 50, 200, 40);
-        label3.setBounds(550, 50, 200, 40);
+        JLabel taskTitleLabel = new JLabel("タスク名");
+        JLabel taskLimitLabel = new JLabel("期限");
+        JLabel taskDixcriptionLabel = new JLabel("備考");
         
-        text1.setBounds(150, 100, 200, 40);
-        text2.setBounds(350, 100, 200, 40);
-        text3.setBounds(550, 100, 200, 40);
+        taskTitleLabel.setBounds(150, 50, 200, 40);
+        taskLimitLabel.setBounds(350, 50, 200, 40);
+        taskDixcriptionLabel.setBounds(550, 50, 200, 40);
+        
+        taskTitle.setBounds(150, 100, 200, 40);
+        taskLimit.setBounds(350, 100, 200, 40);
+        taskDiscription.setBounds(550, 100, 200, 40);
         
         this.add(toDoBtn);
         this.add(doingBtn);
         this.add(doneBtn);
-        this.add(label1);
-        this.add(label2);
-        this.add(label3);
-        this.add(text1);
-        this.add(text2);
-        this.add(text3);
+        this.add(taskTitleLabel);
+        this.add(taskLimitLabel);
+        this.add(taskDixcriptionLabel);
+        this.add(taskTitle);
+        this.add(taskLimit);
+        this.add(taskDiscription);
     }
-    public void pc(){
+    public void panelChange(){
     	mainFrame.reloadPage(mainFrame.PanelNames[0], this);
-    	mainFrame.PanelChange((JPanel)this, mainFrame.PanelNames[0], "");
+    	mainFrame.panelChange((JPanel)this, mainFrame.PanelNames[0], "");
     }
     
     public void setEditString(String setString){
@@ -148,24 +152,24 @@ public class TaskEditPanel extends JPanel {
         	nowSelectedStrings = nowSelectedString.split(":", 0);
         }
         if(nowSelectedStrings.length > 1){
-        	text1.setText(nowSelectedStrings[1]);
+        	taskTitle.setText(nowSelectedStrings[1]);
         }
         else{
-        	text1.setText("");
+        	taskTitle.setText("");
         }
         
         if(nowSelectedStrings.length > 2){
-        	text2.setText(nowSelectedStrings[2]);
+        	taskLimit.setText(nowSelectedStrings[2]);
         }
         else{
-        	text2.setText("");
+        	taskLimit.setText("");
         }
         
         if(nowSelectedStrings.length > 3){
-        	text3.setText(nowSelectedStrings[3]);
+        	taskDiscription.setText(nowSelectedStrings[3]);
         }
         else{
-        	text3.setText("");
+        	taskDiscription.setText("");
         }
     }
 }

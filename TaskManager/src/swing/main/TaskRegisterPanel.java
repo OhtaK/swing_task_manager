@@ -17,7 +17,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
  
 public class TaskRegisterPanel extends JPanel {
-    JButton btn = new JButton("登録");
     MainFrame mainFrame;
     Connection con = null;
 	Statement smt = null;
@@ -27,17 +26,14 @@ public class TaskRegisterPanel extends JPanel {
         this.setName(name);
         this.setLayout(null);
         this.setSize(800, 1000);
-
-        JLabel label1 = new JLabel("タスク名");
-        JLabel label2 = new JLabel("期限");
-        JLabel label3 = new JLabel("備考");
         
-        JTextField text1 = new JTextField(10);
-        JTextField text2 = new JTextField(10);
-        JTextField text3 = new JTextField(10);
+        JButton registerBtn = new JButton("登録");
+        JTextField taskTitle = new JTextField(10);
+        JTextField taskLimit = new JTextField(10);
+        JTextField taskDiscription = new JTextField(10);
         
-        btn.setBounds(350, 150, 200, 40);
-        btn.addActionListener(new ActionListener(){
+        registerBtn.setBounds(350, 150, 200, 40);
+        registerBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
             	try {
             		// JDBCドライバーの指定
@@ -47,7 +43,7 @@ public class TaskRegisterPanel extends JPanel {
             		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
             		smt = con.createStatement();
             		int id = serchLastId(MainPanel.taskSet) + 1;
-            		String sql = "insert into task (id, name, limit_date, comment) values(" + String.valueOf(id) + ", '"+text1.getText() + "', '" + text2.getText() + "', '" + text3.getText() + "');";
+            		String sql = "insert into task (id, name, limit_date, comment) values(" + String.valueOf(id) + ", '"+taskTitle.getText() + "', '" + taskLimit.getText() + "', '" + taskDiscription.getText() + "');";
             		smt.executeUpdate(sql);
             		con.close();
             	} catch (ClassNotFoundException e1) {
@@ -57,30 +53,33 @@ public class TaskRegisterPanel extends JPanel {
             		// TODO 自動生成された catch ブロック
             		e2.printStackTrace();
             	}
-                pc();
+            	panelChange();
             }
         });
         
-        label1.setBounds(150, 50, 200, 40);
-        label2.setBounds(350, 50, 200, 40);
-        label3.setBounds(550, 50, 200, 40);
+        JLabel taskTitleLabel = new JLabel("タスク名");
+        JLabel taskLimitLabel = new JLabel("期限");
+        JLabel taskDiscriptionLabel = new JLabel("備考");
         
-        text1.setBounds(150, 100, 200, 40);
-        text2.setBounds(350, 100, 200, 40);
-        text3.setBounds(550, 100, 200, 40);
+        taskTitleLabel.setBounds(150, 50, 200, 40);
+        taskLimitLabel.setBounds(350, 50, 200, 40);
+        taskDiscriptionLabel.setBounds(550, 50, 200, 40);
         
-        this.add(btn);
-        this.add(label1);
-        this.add(label2);
-        this.add(label3);
-        this.add(text1);
-        this.add(text2);
-        this.add(text3);
+        taskTitle.setBounds(150, 100, 200, 40);
+        taskLimit.setBounds(350, 100, 200, 40);
+        taskDiscription.setBounds(550, 100, 200, 40);
+        
+        this.add(registerBtn);
+        this.add(taskTitleLabel);
+        this.add(taskLimitLabel);
+        this.add(taskDiscriptionLabel);
+        this.add(taskTitle);
+        this.add(taskLimit);
+        this.add(taskDiscription);
     }
-    public void pc(){
+    public void panelChange(){
     	mainFrame.reloadPage(mainFrame.PanelNames[0], this);
-    	//mf.remove(this);
-    	mainFrame.PanelChange((JPanel)this, mainFrame.PanelNames[0], "");
+    	mainFrame.panelChange((JPanel)this, mainFrame.PanelNames[0], "");
     }
     
     public int serchLastId(HashMap<Integer,ArrayList<String>> resultSet){
