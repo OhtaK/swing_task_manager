@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -19,6 +20,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.border.LineBorder;
+
+import dto.TaskDto;
+
 import javax.swing.JPanel;
 
 public class MainPanel extends JPanel{
@@ -91,8 +95,6 @@ public class MainPanel extends JPanel{
     }
         
     public void makeTaskPanel(String panelTitle, MainPanel mainPanel){
-    	Connection con = null;
-    	Statement smt = null;
 
     	//titleに指定したタイトルテキストをつけてタスクパネルを作ります
     	JPanel taskPanel = new JPanel();
@@ -114,43 +116,23 @@ public class MainPanel extends JPanel{
     	// 一覧を生成
     	taskListPanel.setPreferredSize(new Dimension(290, 540));
     	taskListPanel.setBackground(Color.WHITE);
-
-    	try {
-    		// JDBCドライバーの指定
-    		Class.forName("org.sqlite.JDBC");
-
-    		// データベースに接続する なければ作成される
-    		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
-    		smt = con.createStatement();
-    		String sql = "select * from task";
-    		ResultSet rs = smt.executeQuery(sql);
-    		while( rs.next() ) {
-    			ArrayList<String> result = new ArrayList<String>();
-    			for(int i = 2; i < 5; i++){
-    				result.add(rs.getString(i));
-    			}
-    			MainPanel.taskSet.put(rs.getInt(1), result);
-    			if(panelTitle == "TODO" && rs.getInt(5) == 0){
-    				String listElement = String.valueOf(rs.getInt(1)) + ":" + rs.getString(2) + ":" + rs.getString(3) + ":" + rs.getString(4);
-    				toDoListModel.addElement(listElement);
-    			}
-    			else if(panelTitle == "DOING" && rs.getInt(5) == 1){
-    				String listElement = String.valueOf(rs.getInt(1)) + ":" + rs.getString(2) + ":" + rs.getString(3) + ":" + rs.getString(4);
-    				doingListModel.addElement(listElement);
-    			}
-    			else if(panelTitle == "DONE" && rs.getInt(5) == 2){
-    				String listElement = String.valueOf(rs.getInt(1)) + ":" + rs.getString(2) + ":" + rs.getString(3) + ":" + rs.getString(4);
-    				doneListModel.addElement(listElement);
-    			}
-    		}
-    		con.close();
-    	} catch (ClassNotFoundException e1) {
-    		// TODO 自動生成された catch ブロック
-    		e1.printStackTrace();
-    	} catch (SQLException e2) {
-    		// TODO 自動生成された catch ブロック
-    		e2.printStackTrace();
-    	}
+    	
+    	DBAccesser dbAccesser = new DBAccesser();
+    	List<TaskDto> tasks = dbAccesser.selectAll();
+    	
+    	for(TaskDto task : tasks) {
+			String listElement = String.valueOf(task.getId()) + ":" + task.getTitle() + ":" + task.getDiscription() + ":" + task.getLimitDate();
+			if(panelTitle == "TODO" && task.getStatus() == 0){
+				toDoListModel.addElement(listElement);
+			}
+			else if(panelTitle == "DOING" && task.getStatus() == 1){
+				doingListModel.addElement(listElement);
+			}
+			else if(panelTitle == "DONE" && task.getStatus() == 2){
+				doneListModel.addElement(listElement);
+			}
+		}
+    	
     	if(panelTitle == "TODO"){
     		toDoList.setModel(toDoListModel);
     		taskListPanel.add(toDoList);
