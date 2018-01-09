@@ -6,23 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import dto.TaskDto;
 
 public class DBAccesser {
-	Connection con = null;
-	Statement smt = null;
-	
-	public void insert(String data){
-		
-	}
+	public Connection con = null;
+	public Statement smt = null;
 	
 	public List<TaskDto> selectAll(){
 		try {
-    		// JDBCドライバーの指定
-    		//Class.forName("org.sqlite.JDBC");
-
     		// データベースに接続する なければ作成される
     		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
     		smt = con.createStatement();
@@ -48,7 +43,49 @@ public class DBAccesser {
     	}
 	}
 	
-	public void update(String data){
-		
+	public int selectLastId(){
+		try {
+    		// データベースに接続する なければ作成される
+    		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
+    		smt = con.createStatement();
+    		String sql = "select id from task order by id desc limit 1";
+    		ResultSet rs = smt.executeQuery(sql);
+    		int id = rs.getInt(1);
+    		con.close();
+    		return id;
+    	}
+		catch (SQLException e) {
+    		// TODO 自動生成された catch ブロック
+    		e.printStackTrace();
+    		return 0;
+    	}
+	}
+	
+	public void insert(TaskDto task){
+		try {
+    		// データベースに接続する なければ作成される
+    		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
+    		smt = con.createStatement();
+    		String sql = "insert into task (id, name, limit_date, comment) values(" + String.valueOf(task.getId()) + ", '" + task.getTitle() + "', '" + task.getLimitDate() + "', '" + task.getDiscription() + "');";
+    		smt.executeUpdate(sql);
+    		con.close();
+    	} catch (SQLException e2) {
+    		// TODO 自動生成された catch ブロック
+    		e2.printStackTrace();
+    	}
+	}
+	
+	public void update(TaskDto task){
+//		try {
+//    		// データベースに接続する なければ作成される
+//    		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
+//    		smt = con.createStatement();
+//    		//String sql = "insert into task (id, name, limit_date, comment) values(" + String.valueOf(id) + ", '" + task.getTitle() + "', '" + task.getLimitDate() + "', '" + task.getDiscription() + "');";
+//    		smt.executeUpdate(sql);
+//    		con.close();
+//    	} catch (SQLException e2) {
+//    		// TODO 自動生成された catch ブロック
+//    		e2.printStackTrace();
+//    	}
 	}
 }

@@ -5,12 +5,15 @@ import java.awt.event.ActionListener;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import dto.TaskDto;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,24 +38,15 @@ public class TaskRegisterPanel extends JPanel {
         registerBtn.setBounds(350, 150, 200, 40);
         registerBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-            	try {
-            		// JDBCドライバーの指定
-            		Class.forName("org.sqlite.JDBC");
-
-            		// データベースに接続する なければ作成される
-            		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
-            		smt = con.createStatement();
-            		int id = serchLastId(MainPanel.taskSet) + 1;
-            		String sql = "insert into task (id, name, limit_date, comment) values(" + String.valueOf(id) + ", '"+taskTitle.getText() + "', '" + taskLimit.getText() + "', '" + taskDiscription.getText() + "');";
-            		smt.executeUpdate(sql);
-            		con.close();
-            	} catch (ClassNotFoundException e1) {
-            		// TODO 自動生成された catch ブロック
-            		e1.printStackTrace();
-            	} catch (SQLException e2) {
-            		// TODO 自動生成された catch ブロック
-            		e2.printStackTrace();
-            	}
+            	DBAccesser dbAccesser = new DBAccesser();
+            	int id = dbAccesser.selectLastId();
+            	TaskDto task = new TaskDto();
+            	task.setId(id + 1);
+            	task.setTitle(taskTitle.getText());
+            	task.setLimitDate(taskLimit.getText());
+            	task.setDiscription(taskDiscription.getText());
+            	task.setStatus(0);
+            	dbAccesser.insert(task);
             	panelChange();
             }
         });
@@ -80,16 +74,5 @@ public class TaskRegisterPanel extends JPanel {
     public void panelChange(){
     	mainFrame.reloadPage(mainFrame.PanelNames[0], this);
     	mainFrame.panelChange((JPanel)this, mainFrame.PanelNames[0], "");
-    }
-    
-    public int serchLastId(HashMap<Integer,ArrayList<String>> resultSet){
-    	Set<Integer> keySet = resultSet.keySet();
-    	int lastId=0;
-    	for(int key : keySet){
-    		if(lastId < key){
-    			lastId = key;
-    		}
-    	}
-    	return lastId;
     }
 }
