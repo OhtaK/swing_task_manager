@@ -52,6 +52,7 @@ public class TaskEditPanel extends JPanel {
             	dbAccesser.update(task);
             	
             	panelChange();
+            	//mainFrame.showMainPanel();
             }
         });
         
@@ -103,6 +104,10 @@ public class TaskEditPanel extends JPanel {
         taskLimit.setBounds(350, 100, 200, 40);
         taskDiscription.setBounds(550, 100, 200, 40);
         
+//        taskTitle.setText(selectedTask.getTitle());
+//        taskLimit.setText(selectedTask.getLimitDate());
+//        taskDiscription.setText(selectedTask.getDiscription());
+        
         this.add(toDoBtn);
         this.add(doingBtn);
         this.add(doneBtn);
@@ -114,7 +119,7 @@ public class TaskEditPanel extends JPanel {
         this.add(taskDiscription);
     }
     public void panelChange(){
-    	mainFrame.reloadPage(mainFrame.PanelNames[0], this);
+    	mainFrame.reloadPage(mainFrame.PanelNames[0]);
     	mainFrame.panelChange((JPanel)this, mainFrame.PanelNames[0], "");
     }
     

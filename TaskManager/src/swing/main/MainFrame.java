@@ -4,14 +4,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class MainFrame extends JFrame{
-	public String[] PanelNames = {"top","Sub", "Edit"};
+	public String[] PanelNames = {"main","register","edit"};
 	MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
     TaskRegisterPanel taskRegisterPanel = new TaskRegisterPanel(this,PanelNames[1]);
     TaskEditPanel taskEditPanel = new TaskEditPanel(this,PanelNames[2]);
-    MainFrame mf;
+    public MainFrame mf;
     
     public MainFrame(){
-    	MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
         this.add(mainPanel);
         mainPanel.setVisible(true);
         
@@ -30,26 +29,22 @@ public class MainFrame extends JFrame{
         mainFrame.setVisible(true);
     }
     
-    public void reloadPage(String panelName, JPanel jp){
-    	
-    	MainFrame mainFrame = new MainFrame();
-    	mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    	mainFrame.setVisible(true);
+    public void reloadPage(String panelName){
         
     	if(panelName == PanelNames[0]){
-    		mainFrame.remove((MainPanel)jp);
+    		this.remove(this.mainPanel);
     		MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
-    		mainFrame.add(mainPanel);
+    		this.add(mainPanel);
     	}
     	else if(panelName == PanelNames[1]){
-    		mainFrame.remove((TaskRegisterPanel)jp);
+    		this.remove(this.taskRegisterPanel);
     		TaskRegisterPanel taskRegisterPanel = new TaskRegisterPanel(this,PanelNames[1]);
-    		mainFrame.add(taskRegisterPanel);
+    		this.add(taskRegisterPanel);
     	}
     	else if(panelName == PanelNames[2]){
-    		mainFrame.remove((TaskEditPanel)jp);
+    		this.remove(this.taskEditPanel);
     		TaskEditPanel taskEditPanel = new TaskEditPanel(this,PanelNames[2]);
-    		mainFrame.add(taskEditPanel);
+    		this.add(taskEditPanel);
     	}
     }
     
@@ -60,7 +55,7 @@ public class MainFrame extends JFrame{
         //遷移元のパネルを非表示
         if(nowPanelName == PanelNames[0]){
         	mainPanel = (MainPanel)nowPanel;
-        	nowPanel.setVisible(false);
+        	mainPanel.setVisible(false);
         }
         else if(nowPanelName == PanelNames[1]){
         	taskRegisterPanel = (TaskRegisterPanel)nowPanel;

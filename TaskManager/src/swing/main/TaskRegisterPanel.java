@@ -1,5 +1,6 @@
 package swing.main;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Statement;
@@ -12,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import dto.TaskDto;
 
@@ -72,7 +74,7 @@ public class TaskRegisterPanel extends JPanel {
         this.add(taskDiscription);
     }
     public void panelChange(){
-    	mainFrame.reloadPage(mainFrame.PanelNames[0], this);
+    	mainFrame.reloadPage(mainFrame.PanelNames[0]);
     	mainFrame.panelChange((JPanel)this, mainFrame.PanelNames[0], "");
     }
 }
