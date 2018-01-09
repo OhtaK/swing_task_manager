@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import dto.TaskDto;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -40,24 +42,14 @@ public class TaskEditPanel extends JPanel {
         
         toDoBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-            	try {
-          		   // JDBCドライバーの指定
-          		   Class.forName("org.sqlite.JDBC");
-          		 
-          		   // データベースに接続する なければ作成される
-          		   con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
-          		   smt = con.createStatement();
-          		   String sql = "update task set name='"+ taskTitle.getText() + "', limit_date='" + taskLimit.getText() + "', comment='"+ taskDiscription.getText() + "', status=0 where id=" + nowSelectedStrings[0]+ ";";
-          		  
-          		   smt.executeUpdate(sql);
-          		   con.close();
-          		  } catch (ClassNotFoundException e1) {
-          		   // TODO 自動生成された catch ブロック
-          		   e1.printStackTrace();
-          		  } catch (SQLException e2) {
-          		   // TODO 自動生成された catch ブロック
-          		   e2.printStackTrace();
-          		  }
+            	DBAccesser dbAccesser = new DBAccesser();
+            	TaskDto task = new TaskDto();
+            	task.setId(Integer.parseInt(nowSelectedStrings[0]));
+            	task.setTitle(taskTitle.getText());
+            	task.setLimitDate(taskLimit.getText());
+            	task.setDiscription(taskDiscription.getText());
+            	task.setStatus(0);
+            	dbAccesser.update(task);
             	
             	panelChange();
             }
@@ -68,24 +60,14 @@ public class TaskEditPanel extends JPanel {
         
         doingBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-            	try {
-          		   // JDBCドライバーの指定
-          		   Class.forName("org.sqlite.JDBC");
-          		 
-          		   // データベースに接続する なければ作成される
-          		   con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
-          		   smt = con.createStatement();
-          		   String sql = "update task set name='"+ taskTitle.getText() + "', limit_date='" + taskLimit.getText() + "', comment='"+ taskDiscription.getText() + "', status=1 where id=" + nowSelectedStrings[0]+ ";";
-          		  
-          		   smt.executeUpdate(sql);
-          		   con.close();
-          		  } catch (ClassNotFoundException e1) {
-          		   // TODO 自動生成された catch ブロック
-          		   e1.printStackTrace();
-          		  } catch (SQLException e2) {
-          		   // TODO 自動生成された catch ブロック
-          		   e2.printStackTrace();
-          		  }
+            	DBAccesser dbAccesser = new DBAccesser();
+            	TaskDto task = new TaskDto();
+            	task.setId(Integer.parseInt(nowSelectedStrings[0]));
+            	task.setTitle(taskTitle.getText());
+            	task.setLimitDate(taskLimit.getText());
+            	task.setDiscription(taskDiscription.getText());
+            	task.setStatus(1);
+            	dbAccesser.update(task);
             	
             	panelChange();
             }
@@ -96,24 +78,14 @@ public class TaskEditPanel extends JPanel {
         
         doneBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-            	try {
-            		// JDBCドライバーの指定
-            		Class.forName("org.sqlite.JDBC");
-
-            		// データベースに接続する なければ作成される
-            		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
-            		smt = con.createStatement();
-            		String sql = "update task set name='"+ taskTitle.getText() + "', limit_date='" + taskLimit.getText() + "', comment='"+ taskDiscription.getText() + "', status=2 where id=" + nowSelectedStrings[0]+ ";";
-
-            		smt.executeUpdate(sql);
-            		con.close();
-            	} catch (ClassNotFoundException e1) {
-            		// TODO 自動生成された catch ブロック
-            		e1.printStackTrace();
-            	} catch (SQLException e2) {
-            		// TODO 自動生成された catch ブロック
-            		e2.printStackTrace();
-            	}
+            	DBAccesser dbAccesser = new DBAccesser();
+            	TaskDto task = new TaskDto();
+            	task.setId(Integer.parseInt(nowSelectedStrings[0]));
+            	task.setTitle(taskTitle.getText());
+            	task.setLimitDate(taskLimit.getText());
+            	task.setDiscription(taskDiscription.getText());
+            	task.setStatus(2);
+            	dbAccesser.update(task);
             	
             	panelChange();
             }
