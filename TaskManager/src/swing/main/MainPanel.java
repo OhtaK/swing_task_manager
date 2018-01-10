@@ -66,7 +66,7 @@ public class MainPanel extends JPanel{
     	createButton.setPreferredSize(new Dimension(100,50));
     	createButton.addActionListener(new ActionListener(){
     		public void actionPerformed(ActionEvent e){
-    			panelChange(mainFrame.PanelNames[1]);
+    			panelChangeToRegister(mainFrame.PanelNames[1]);
     		}
     	});
     	buttonPanel.add(createButton);
@@ -77,20 +77,32 @@ public class MainPanel extends JPanel{
     		//編集ボタンを押したとき選択中の要素をパブリック変数にセット
     		//タスク編集パネルで使う
     		public void actionPerformed(ActionEvent e){
+    			TaskDto task = new TaskDto();
     			if(!toDoList.isSelectionEmpty()){
     				nowSelectText = toDoList.getSelectedValue();
+    				task.setStatus(0);
     			}
     			else if(!doingList.isSelectionEmpty()){
     				nowSelectText = doingList.getSelectedValue();
+    				task.setStatus(1);
     			}
     			else if(!doneList.isSelectionEmpty()){
     				nowSelectText = doneList.getSelectedValue();
+    				task.setStatus(2);
     			}
     			else{
     				System.out.println("何も選択されていません");
     				return;
     			}
-    			panelChange(mainFrame.PanelNames[2]);
+    			
+    			String[] nowSelectTexts = new String[4];
+    			nowSelectTexts = nowSelectText.split(":", 0);
+    			
+    			task.setId(Integer.parseInt(nowSelectTexts[0]));
+            	task.setTitle(nowSelectTexts[1]);
+            	task.setLimitDate(nowSelectTexts[2]);
+            	task.setDiscription(nowSelectTexts[3]);
+            	panelChangeToEdit(mainFrame.PanelNames[2], task);
     		}
     	});
     	buttonPanel.add(editButton);
@@ -161,15 +173,23 @@ public class MainPanel extends JPanel{
     	mainPanel.add(taskPanel);
     }
 
-    public void panelChange(String toPanelName){
-    	if(toPanelName == mainFrame.PanelNames[1]){
-    		mainFrame.showRegisterPanel((JPanel)this);
-    	}
-    	else if(toPanelName == mainFrame.PanelNames[2]){
-    		mainFrame.showEditPanel((JPanel)this, nowSelectText);
-    	}
-    	else{
-    		System.out.println("パネルの名前が不正です。");
-    	}
+//    public void panelChange(String toPanelName, TaskDto task){
+//    	if(toPanelName == mainFrame.PanelNames[1]){
+//    		mainFrame.showRegisterPanel((JPanel)this);
+//    	}
+//    	else if(toPanelName == mainFrame.PanelNames[2]){
+//    		mainFrame.showEditPanel((JPanel)this, task);
+//    	}
+//    	else{
+//    		System.out.println("パネルの名前が不正です。");
+//    	}
+//    }
+    
+    public void panelChangeToRegister(String toPanelName){
+    	mainFrame.showRegisterPanel((JPanel)this);
+    }
+    
+    public void panelChangeToEdit(String toPanelName, TaskDto task){
+    	mainFrame.showEditPanel((JPanel)this, task);
     }
 } 

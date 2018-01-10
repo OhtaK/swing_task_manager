@@ -3,6 +3,8 @@ package swing.main;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import dto.TaskDto;
+
 public class MainFrame extends JFrame{
 	public String[] PanelNames = {"main","register","edit"};
 	MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
@@ -61,10 +63,10 @@ public class MainFrame extends JFrame{
     }
     
     //タスク編集パネルを表示
-    public void showEditPanel(JPanel nowPanel, String EditString){
+    public void showEditPanel(JPanel nowPanel, TaskDto task){
     	nowPanel.setVisible(false);
         //初期文字列を設定
-        taskEditPanel.setEditString(EditString);
+        taskEditPanel.setEditString(task);
         taskEditPanel.setVisible(true);
     }
 }

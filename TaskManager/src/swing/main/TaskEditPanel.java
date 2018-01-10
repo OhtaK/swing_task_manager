@@ -21,21 +21,16 @@ public class TaskEditPanel extends JPanel {
     Connection con = null;
 	Statement smt = null;
 	
+	JLabel taskId = new JLabel();
 	JTextField taskTitle = new JTextField(10);
     JTextField taskLimit = new JTextField(10);
     JTextField taskDiscription = new JTextField(10);
     
-    String nowSelectedString = MainPanel.nowSelectText;
-    String[] nowSelectedStrings = new String[4];
-    
-    public TaskEditPanel(MainFrame mf,String name){
+    public TaskEditPanel(MainFrame mf, String name){
     	mainFrame = mf;
         this.setName(name);
         this.setLayout(null);
         this.setSize(800, 1000);
-        if(nowSelectedString != null){
-        	nowSelectedStrings = nowSelectedString.split(":", 0);
-        }
         
         JButton toDoBtn = new JButton("todoに移動");
         toDoBtn.setBounds(150, 150, 200, 40);
@@ -44,7 +39,7 @@ public class TaskEditPanel extends JPanel {
             public void actionPerformed(ActionEvent e){
             	DBAccesser dbAccesser = new DBAccesser();
             	TaskDto task = new TaskDto();
-            	task.setId(Integer.parseInt(nowSelectedStrings[0]));
+            	task.setId(Integer.parseInt(taskId.getText()));
             	task.setTitle(taskTitle.getText());
             	task.setLimitDate(taskLimit.getText());
             	task.setDiscription(taskDiscription.getText());
@@ -52,7 +47,6 @@ public class TaskEditPanel extends JPanel {
             	dbAccesser.update(task);
             	
             	panelChange();
-            	//mainFrame.showMainPanel();
             }
         });
         
@@ -63,7 +57,7 @@ public class TaskEditPanel extends JPanel {
             public void actionPerformed(ActionEvent e){
             	DBAccesser dbAccesser = new DBAccesser();
             	TaskDto task = new TaskDto();
-            	task.setId(Integer.parseInt(nowSelectedStrings[0]));
+            	task.setId(Integer.parseInt(taskId.getText()));
             	task.setTitle(taskTitle.getText());
             	task.setLimitDate(taskLimit.getText());
             	task.setDiscription(taskDiscription.getText());
@@ -81,38 +75,40 @@ public class TaskEditPanel extends JPanel {
             public void actionPerformed(ActionEvent e){
             	DBAccesser dbAccesser = new DBAccesser();
             	TaskDto task = new TaskDto();
-            	task.setId(Integer.parseInt(nowSelectedStrings[0]));
+            	task.setId(Integer.parseInt(taskId.getText()));
             	task.setTitle(taskTitle.getText());
             	task.setLimitDate(taskLimit.getText());
             	task.setDiscription(taskDiscription.getText());
             	task.setStatus(2);
             	dbAccesser.update(task);
+            	
             	panelChange();
             }
         });
         
+        JLabel taskIdLabel = new JLabel("ID");
         JLabel taskTitleLabel = new JLabel("タスク名");
         JLabel taskLimitLabel = new JLabel("期限");
         JLabel taskDixcriptionLabel = new JLabel("備考");
         
+        taskIdLabel.setBounds(50, 50, 200, 40);
         taskTitleLabel.setBounds(150, 50, 200, 40);
         taskLimitLabel.setBounds(350, 50, 200, 40);
         taskDixcriptionLabel.setBounds(550, 50, 200, 40);
         
+        taskId.setBounds(50, 100, 200, 40);
         taskTitle.setBounds(150, 100, 200, 40);
         taskLimit.setBounds(350, 100, 200, 40);
         taskDiscription.setBounds(550, 100, 200, 40);
         
-//        taskTitle.setText(selectedTask.getTitle());
-//        taskLimit.setText(selectedTask.getLimitDate());
-//        taskDiscription.setText(selectedTask.getDiscription());
-        
         this.add(toDoBtn);
         this.add(doingBtn);
         this.add(doneBtn);
+        this.add(taskIdLabel);
         this.add(taskTitleLabel);
         this.add(taskLimitLabel);
         this.add(taskDixcriptionLabel);
+        this.add(taskId);
         this.add(taskTitle);
         this.add(taskLimit);
         this.add(taskDiscription);
@@ -122,30 +118,10 @@ public class TaskEditPanel extends JPanel {
     	mainFrame.showMainPanel((JPanel)this);
     }
     
-    public void setEditString(String setString){
-    	String nowSelectedString = setString;
-        if(nowSelectedString != null){
-        	nowSelectedStrings = nowSelectedString.split(":", 0);
-        }
-        if(nowSelectedStrings.length > 1){
-        	taskTitle.setText(nowSelectedStrings[1]);
-        }
-        else{
-        	taskTitle.setText("");
-        }
-        
-        if(nowSelectedStrings.length > 2){
-        	taskLimit.setText(nowSelectedStrings[2]);
-        }
-        else{
-        	taskLimit.setText("");
-        }
-        
-        if(nowSelectedStrings.length > 3){
-        	taskDiscription.setText(nowSelectedStrings[3]);
-        }
-        else{
-        	taskDiscription.setText("");
-        }
+    public void setEditString(TaskDto task){
+    	taskId.setText(String.valueOf(task.getId()));
+    	taskTitle.setText(task.getTitle());
+    	taskLimit.setText(task.getLimitDate());
+    	taskDiscription.setText(task.getDiscription());
     }
 }
