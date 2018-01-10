@@ -80,17 +80,20 @@ public class MainPanel extends JPanel{
     			if(!toDoList.isSelectionEmpty()){
     				nowSelectText = toDoList.getSelectedValue();
     			}
-    			if(!doingList.isSelectionEmpty()){
+    			else if(!doingList.isSelectionEmpty()){
     				nowSelectText = doingList.getSelectedValue();
     			}
-    			if(!doneList.isSelectionEmpty()){
+    			else if(!doneList.isSelectionEmpty()){
     				nowSelectText = doneList.getSelectedValue();
+    			}
+    			else{
+    				System.out.println("何も選択されていません");
+    				return;
     			}
     			panelChange(mainFrame.PanelNames[2]);
     		}
     	});
     	buttonPanel.add(editButton);
-
     	this.add(buttonPanel);
     }
         
@@ -159,6 +162,14 @@ public class MainPanel extends JPanel{
     }
 
     public void panelChange(String toPanelName){
-    	mainFrame.panelChange((JPanel)this, toPanelName, nowSelectText);
+    	if(toPanelName == mainFrame.PanelNames[1]){
+    		mainFrame.showRegisterPanel((JPanel)this);
+    	}
+    	else if(toPanelName == mainFrame.PanelNames[2]){
+    		mainFrame.showEditPanel((JPanel)this, nowSelectText);
+    	}
+    	else{
+    		System.out.println("パネルの名前が不正です。");
+    	}
     }
 } 

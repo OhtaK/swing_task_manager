@@ -29,54 +29,42 @@ public class MainFrame extends JFrame{
         mainFrame.setVisible(true);
     }
     
-    public void reloadPage(String panelName){
-        
-    	if(panelName == PanelNames[0]){
+    public void reloadPage(String reloadPanelName){
+    	if(reloadPanelName == PanelNames[0]){
     		this.remove(this.mainPanel);
     		MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
     		this.add(mainPanel);
     	}
-    	else if(panelName == PanelNames[1]){
+    	else if(reloadPanelName == PanelNames[1]){
     		this.remove(this.taskRegisterPanel);
     		TaskRegisterPanel taskRegisterPanel = new TaskRegisterPanel(this,PanelNames[1]);
     		this.add(taskRegisterPanel);
     	}
-    	else if(panelName == PanelNames[2]){
+    	else if(reloadPanelName == PanelNames[2]){
     		this.remove(this.taskEditPanel);
     		TaskEditPanel taskEditPanel = new TaskEditPanel(this,PanelNames[2]);
     		this.add(taskEditPanel);
     	}
     }
     
-    //パネル遷移メソッド
-    public void panelChange(JPanel nowPanel, String toPanelName, String EditString){
-    	String nowPanelName = nowPanel.getName();
-        
-        //遷移元のパネルを非表示
-        if(nowPanelName == PanelNames[0]){
-        	mainPanel = (MainPanel)nowPanel;
-        	mainPanel.setVisible(false);
-        }
-        else if(nowPanelName == PanelNames[1]){
-        	taskRegisterPanel = (TaskRegisterPanel)nowPanel;
-        	taskRegisterPanel.setVisible(false);
-        }
-        else if(nowPanelName == PanelNames[2]){
-        	taskEditPanel = (TaskEditPanel)nowPanel;
-        	taskEditPanel.setVisible(false);
-        }
-        
-        //遷移先のパネルを表示
-        if(toPanelName == PanelNames[0]){
-        	mainPanel.setVisible(true);
-        }
-        else if(toPanelName == PanelNames[1]){
-        	taskRegisterPanel.setVisible(true);
-        }
-        else if(toPanelName == PanelNames[2]){
-        	//編集パネルだけ初期文字列を設定
-        	taskEditPanel.setEditString(EditString);
-        	taskEditPanel.setVisible(true);
-        }
+    //パネル遷移メソッド    
+    //メインパネルを表示
+    public void showMainPanel(JPanel nowPanel){
+    	nowPanel.setVisible(false);
+        mainPanel.setVisible(true);
+    }
+    
+    //タスク登録パネルを表示
+    public void showRegisterPanel(JPanel nowPanel){
+    	nowPanel.setVisible(false);
+        taskRegisterPanel.setVisible(true);
+    }
+    
+    //タスク編集パネルを表示
+    public void showEditPanel(JPanel nowPanel, String EditString){
+    	nowPanel.setVisible(false);
+        //初期文字列を設定
+        taskEditPanel.setEditString(EditString);
+        taskEditPanel.setVisible(true);
     }
 }

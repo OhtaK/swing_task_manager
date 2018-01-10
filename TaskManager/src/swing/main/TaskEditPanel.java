@@ -87,7 +87,6 @@ public class TaskEditPanel extends JPanel {
             	task.setDiscription(taskDiscription.getText());
             	task.setStatus(2);
             	dbAccesser.update(task);
-            	
             	panelChange();
             }
         });
@@ -120,7 +119,7 @@ public class TaskEditPanel extends JPanel {
     }
     public void panelChange(){
     	mainFrame.reloadPage(mainFrame.PanelNames[0]);
-    	mainFrame.panelChange((JPanel)this, mainFrame.PanelNames[0], "");
+    	mainFrame.showMainPanel((JPanel)this);
     }
     
     public void setEditString(String setString){

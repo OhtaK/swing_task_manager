@@ -73,8 +73,9 @@ public class TaskRegisterPanel extends JPanel {
         this.add(taskLimit);
         this.add(taskDiscription);
     }
+    
     public void panelChange(){
     	mainFrame.reloadPage(mainFrame.PanelNames[0]);
-    	mainFrame.panelChange((JPanel)this, mainFrame.PanelNames[0], "");
+    	mainFrame.showMainPanel((JPanel)this);
     }
 }
