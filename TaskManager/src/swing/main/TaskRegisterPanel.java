@@ -1,30 +1,17 @@
 package swing.main;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import dto.TaskDto;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
  
 public class TaskRegisterPanel extends JPanel {
     MainFrame mainFrame;
-    Connection con = null;
-	Statement smt = null;
 	
     public TaskRegisterPanel(MainFrame mf,String name){
     	mainFrame = mf;
@@ -33,9 +20,9 @@ public class TaskRegisterPanel extends JPanel {
         this.setSize(800, 1000);
         
         JButton registerBtn = new JButton("登録");
-        JTextField taskTitle = new JTextField(10);
-        JTextField taskLimit = new JTextField(10);
-        JTextField taskDiscription = new JTextField(10);
+        JTextField taskTitle = new JTextField("", 10);
+        JTextField taskLimit = new JTextField("", 10);
+        JTextField taskDiscription = new JTextField("", 10);
         
         registerBtn.setBounds(350, 150, 200, 40);
         registerBtn.addActionListener(new ActionListener(){

@@ -2,7 +2,6 @@ package swing.main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Statement;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -10,16 +9,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import dto.TaskDto;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
  
 public class TaskEditPanel extends JPanel {
     
     MainFrame mainFrame;
-    Connection con = null;
-	Statement smt = null;
 	
 	JLabel taskId = new JLabel();
 	JTextField taskTitle = new JTextField(10);
@@ -120,8 +113,14 @@ public class TaskEditPanel extends JPanel {
     
     public void setEditString(TaskDto task){
     	taskId.setText(String.valueOf(task.getId()));
-    	taskTitle.setText(task.getTitle());
-    	taskLimit.setText(task.getLimitDate());
-    	taskDiscription.setText(task.getDiscription());
+    	if(task.getTitle() != null){
+    		taskTitle.setText(task.getTitle());
+    	}
+    	if(task.getLimitDate() != null){
+    		taskLimit.setText(task.getLimitDate());
+    	}
+    	if(task.getDiscription() != null){
+    		taskDiscription.setText(task.getDiscription());
+    	}
     }
 }

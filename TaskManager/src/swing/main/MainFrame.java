@@ -10,7 +10,6 @@ public class MainFrame extends JFrame{
 	MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
     TaskRegisterPanel taskRegisterPanel = new TaskRegisterPanel(this,PanelNames[1]);
     TaskEditPanel taskEditPanel = new TaskEditPanel(this,PanelNames[2]);
-    public MainFrame mf;
     
     public MainFrame(){
         this.add(mainPanel);

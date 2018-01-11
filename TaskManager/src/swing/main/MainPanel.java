@@ -7,13 +7,6 @@ import java.awt.Font;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -28,10 +21,6 @@ import javax.swing.JPanel;
 public class MainPanel extends JPanel{
 	
     MainFrame mainFrame;
-    
-    public static HashMap<Integer,ArrayList<String>> taskSet = new HashMap<Integer,ArrayList<String>>();
-    public static String nowSelectText;
-    
     //各タスク表示用のリスト
     DefaultListModel<String> toDoListModel = new DefaultListModel<String>();
     JList<String> toDoList = new JList<String>();
@@ -41,6 +30,10 @@ public class MainPanel extends JPanel{
     
     DefaultListModel<String> doneListModel = new DefaultListModel<String>();
     JList<String> doneList = new JList<String>();
+    
+    JLabel notSelectedErrorLabel = new JLabel("何も選択されていません。選択してからもう一度押してください。");
+    JLabel deletedAnnotationLabel = new JLabel("タスクを消去しました。どこかのボタンを押せば表示に反映されます。");
+    boolean isNotSelectedError = false;
     
     //panel作成
     MainPanel(MainFrame mf,String  name){
@@ -74,39 +67,34 @@ public class MainPanel extends JPanel{
     	JButton editButton = new JButton("タスクを編集");
     	editButton.setPreferredSize(new Dimension(100,50));
     	editButton.addActionListener(new ActionListener(){
-    		//編集ボタンを押したとき選択中の要素をパブリック変数にセット
-    		//タスク編集パネルで使う
     		public void actionPerformed(ActionEvent e){
-    			TaskDto task = new TaskDto();
-    			if(!toDoList.isSelectionEmpty()){
-    				nowSelectText = toDoList.getSelectedValue();
-    				task.setStatus(0);
+    			//ボタンを押したとき選択中の要素をdtoにセット
+    			TaskDto task = setTaskDtoFromSelectedString();
+    			if(!isNotSelectedError){
+    				panelChangeToEdit(mainFrame.PanelNames[2], task);
     			}
-    			else if(!doingList.isSelectionEmpty()){
-    				nowSelectText = doingList.getSelectedValue();
-    				task.setStatus(1);
-    			}
-    			else if(!doneList.isSelectionEmpty()){
-    				nowSelectText = doneList.getSelectedValue();
-    				task.setStatus(2);
-    			}
-    			else{
-    				System.out.println("何も選択されていません");
-    				return;
-    			}
-    			
-    			String[] nowSelectTexts = new String[4];
-    			nowSelectTexts = nowSelectText.split(":", 0);
-    			
-    			task.setId(Integer.parseInt(nowSelectTexts[0]));
-            	task.setTitle(nowSelectTexts[1]);
-            	task.setLimitDate(nowSelectTexts[2]);
-            	task.setDiscription(nowSelectTexts[3]);
-            	panelChangeToEdit(mainFrame.PanelNames[2], task);
     		}
     	});
     	buttonPanel.add(editButton);
+    	
+    	JButton deleteButton = new JButton("タスクを消去");
+    	deleteButton.setPreferredSize(new Dimension(100,50));
+    	deleteButton.addActionListener(new ActionListener(){
+    		public void actionPerformed(ActionEvent e){
+    			//ボタンを押したとき選択中の要素をdtoにセット
+    			TaskDto task = setTaskDtoFromSelectedString();
+            	DBAccesser dbAccesser = new DBAccesser();
+            	dbAccesser.delete(task.getId());
+            	deletedAnnotationLabel.setVisible(true);
+    		}
+    	});
+    	buttonPanel.add(deleteButton);
     	this.add(buttonPanel);
+    	
+    	notSelectedErrorLabel.setVisible(false);
+    	deletedAnnotationLabel.setVisible(false);
+    	this.add(notSelectedErrorLabel);
+    	this.add(deletedAnnotationLabel);
     }
         
     public void makeTaskPanel(String panelTitle, MainPanel mainPanel){
@@ -172,18 +160,47 @@ public class MainPanel extends JPanel{
     	taskPanel.setBorder(border);
     	mainPanel.add(taskPanel);
     }
-
-//    public void panelChange(String toPanelName, TaskDto task){
-//    	if(toPanelName == mainFrame.PanelNames[1]){
-//    		mainFrame.showRegisterPanel((JPanel)this);
-//    	}
-//    	else if(toPanelName == mainFrame.PanelNames[2]){
-//    		mainFrame.showEditPanel((JPanel)this, task);
-//    	}
-//    	else{
-//    		System.out.println("パネルの名前が不正です。");
-//    	}
-//    }
+    
+    public TaskDto setTaskDtoFromSelectedString(){
+    	isNotSelectedError = false;
+    	TaskDto task = new TaskDto();
+		String nowSelectText;
+		if(!toDoList.isSelectionEmpty()){
+			nowSelectText = toDoList.getSelectedValue();
+			task.setStatus(0);
+		}
+		else if(!doingList.isSelectionEmpty()){
+			nowSelectText = doingList.getSelectedValue();
+			task.setStatus(1);
+		}
+		else if(!doneList.isSelectionEmpty()){
+			nowSelectText = doneList.getSelectedValue();
+			task.setStatus(2);
+		}
+		else{
+			notSelectedErrorLabel.setVisible(true);
+			isNotSelectedError = true;
+			return null;
+		}
+		
+		String[] nowSelectTexts = new String[4];
+		nowSelectTexts = nowSelectText.split(":", 0);
+		
+		task.setId(Integer.parseInt(nowSelectTexts[0]));
+		//配列の末尾に空文字が入っていると配列の長さが変わってしまうみたいなのでこう場合分けします。
+		//配列の途中の空文字は空文字として認識されてるっぽい…
+		if(nowSelectTexts.length > 1){
+			task.setTitle(nowSelectTexts[1]);
+		}
+		if(nowSelectTexts.length > 2){
+			task.setLimitDate(nowSelectTexts[2]);
+		}
+		if(nowSelectTexts.length > 3){
+			task.setDiscription(nowSelectTexts[3]);
+		}
+    	
+    	return task;
+    }
     
     public void panelChangeToRegister(String toPanelName){
     	mainFrame.showRegisterPanel((JPanel)this);

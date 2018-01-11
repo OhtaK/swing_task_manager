@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import dto.TaskDto;
 
@@ -63,7 +61,7 @@ public class DBAccesser {
 	
 	public void insert(TaskDto task){
 		try {
-    		// データベースに接続する なければ作成される
+    		// データベースに接続
     		con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
     		smt = con.createStatement();
     		String sql = "insert into task (id, name, limit_date, comment) values(" + String.valueOf(task.getId()) + ", '" + task.getTitle() + "', '" + task.getLimitDate() + "', '" + task.getDiscription() + "');";
@@ -77,10 +75,24 @@ public class DBAccesser {
 	
 	public void update(TaskDto task){
 		try {
-			// データベースに接続する なければ作成される
+			// データベースに接続
 			con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
 			smt = con.createStatement();
 			String sql = "update task set name='"+ task.getTitle() + "', limit_date='" + task.getLimitDate() + "', comment='"+ task.getDiscription() + "', status = " + task.getStatus() + " where id=" + task.getId() + ";";
+			smt.executeUpdate(sql);
+			con.close();
+		} catch (SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+	}
+	
+	public void delete(int id){
+		try {
+			// データベースに接続
+			con = DriverManager.getConnection("jdbc:sqlite:/Users/keisuke-ota/taskManager.sqlite");
+			smt = con.createStatement();
+			String sql = "DELETE FROM task WHERE id=" + id + ";";
 			smt.executeUpdate(sql);
 			con.close();
 		} catch (SQLException e) {
