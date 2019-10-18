@@ -30,15 +30,7 @@ public class TaskEditPanel extends JPanel {
         
         toDoBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-            	DBAccesser dbAccesser = new DBAccesser();
-            	TaskDto task = new TaskDto();
-            	task.setId(Integer.parseInt(taskId.getText()));
-            	task.setTitle(taskTitle.getText());
-            	task.setLimitDate(taskLimit.getText());
-            	task.setDiscription(taskDiscription.getText());
-            	task.setStatus(0);
-            	dbAccesser.update(task);
-            	
+            	updateData(0);
             	panelChange();
             }
         });
@@ -48,15 +40,7 @@ public class TaskEditPanel extends JPanel {
         
         doingBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-            	DBAccesser dbAccesser = new DBAccesser();
-            	TaskDto task = new TaskDto();
-            	task.setId(Integer.parseInt(taskId.getText()));
-            	task.setTitle(taskTitle.getText());
-            	task.setLimitDate(taskLimit.getText());
-            	task.setDiscription(taskDiscription.getText());
-            	task.setStatus(1);
-            	dbAccesser.update(task);
-            	
+            	updateData(1);
             	panelChange();
             }
         });
@@ -66,15 +50,7 @@ public class TaskEditPanel extends JPanel {
         
         doneBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-            	DBAccesser dbAccesser = new DBAccesser();
-            	TaskDto task = new TaskDto();
-            	task.setId(Integer.parseInt(taskId.getText()));
-            	task.setTitle(taskTitle.getText());
-            	task.setLimitDate(taskLimit.getText());
-            	task.setDiscription(taskDiscription.getText());
-            	task.setStatus(2);
-            	dbAccesser.update(task);
-            	
+            	updateData(2);
             	panelChange();
             }
         });
@@ -106,6 +82,7 @@ public class TaskEditPanel extends JPanel {
         this.add(taskLimit);
         this.add(taskDiscription);
     }
+    
     public void panelChange(){
     	mainFrame.reloadPage(mainFrame.PanelNames[0]);
     	mainFrame.showMainPanel((JPanel)this);
@@ -122,5 +99,16 @@ public class TaskEditPanel extends JPanel {
     	if(task.getDiscription() != null){
     		taskDiscription.setText(task.getDiscription());
     	}
+    }
+    
+    public void updateData(int status){
+    	DBAccesser dbAccesser = new DBAccesser();
+    	TaskDto task = new TaskDto();
+    	task.setId(Integer.parseInt(taskId.getText()));
+    	task.setTitle(taskTitle.getText());
+    	task.setLimitDate(taskLimit.getText());
+    	task.setDiscription(taskDiscription.getText());
+    	task.setStatus(status);
+    	dbAccesser.update(task);
     }
 }

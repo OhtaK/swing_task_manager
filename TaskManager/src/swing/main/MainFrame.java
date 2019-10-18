@@ -1,12 +1,24 @@
 package swing.main;
 
+import java.security.KeyStore.Entry;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import dto.TaskDto;
 
 public class MainFrame extends JFrame{
-	public String[] PanelNames = {"main","register","edit"};
+	public String[] PanelNames = {"main","register","edit"};//この名前でパネルの指定をする
+	
+	//各種パネルをフィールドで作成
 	MainPanel mainPanel = new MainPanel(this,PanelNames[0]);
     TaskRegisterPanel taskRegisterPanel = new TaskRegisterPanel(this,PanelNames[1]);
     TaskEditPanel taskEditPanel = new TaskEditPanel(this,PanelNames[2]);
@@ -25,11 +37,17 @@ public class MainFrame extends JFrame{
     }
     
     public static void main(String[] args) {
+    	int r = RandomUtils.nextInt(PER) + 1;
+        
+        
         MainFrame mainFrame = new MainFrame();
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
     }
     
+    //ページの再描画用
+    //mainPanelはこれをしないと変更が表示に反映されない
+    //一応他の二つのパネル分も…
     public void reloadPage(String reloadPanelName){
     	if(reloadPanelName == PanelNames[0]){
     		this.remove(this.mainPanel);
@@ -48,7 +66,9 @@ public class MainFrame extends JFrame{
     	}
     }
     
-    //パネル遷移メソッド    
+    //パネル遷移メソッド
+    //あらかじめ全パネルを作成して表示、非表示を切り替える方式
+    
     //メインパネルを表示
     public void showMainPanel(JPanel nowPanel){
     	nowPanel.setVisible(false);

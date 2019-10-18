@@ -59,7 +59,7 @@ public class MainPanel extends JPanel{
     	createButton.setPreferredSize(new Dimension(100,50));
     	createButton.addActionListener(new ActionListener(){
     		public void actionPerformed(ActionEvent e){
-    			panelChangeToRegister(mainFrame.PanelNames[1]);
+    			panelChangeToRegister();
     		}
     	});
     	buttonPanel.add(createButton);
@@ -71,7 +71,7 @@ public class MainPanel extends JPanel{
     			//ボタンを押したとき選択中の要素をdtoにセット
     			TaskDto task = setTaskDtoFromSelectedString();
     			if(!isNotSelectedError){
-    				panelChangeToEdit(mainFrame.PanelNames[2], task);
+    				panelChangeToEdit(task);
     			}
     		}
     	});
@@ -202,11 +202,11 @@ public class MainPanel extends JPanel{
     	return task;
     }
     
-    public void panelChangeToRegister(String toPanelName){
+    public void panelChangeToRegister(){
     	mainFrame.showRegisterPanel((JPanel)this);
     }
     
-    public void panelChangeToEdit(String toPanelName, TaskDto task){
+    public void panelChangeToEdit(TaskDto task){
     	mainFrame.showEditPanel((JPanel)this, task);
     }
 } 
